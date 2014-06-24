@@ -1,6 +1,5 @@
 import datetime
 import re
-import locale
 
 from django.db.models.query import QuerySet, ValuesQuerySet
 from django.http import HttpResponse
@@ -40,7 +39,6 @@ class ExcelResponse(HttpResponse):
             else:
                 use_xls = True
         if use_xls:
-            locale.setlocale(locale.LC_ALL, '')
             book = xlwt.Workbook(encoding=encoding)
             sheet = book.add_sheet('Sheet 1')
             styles = {'datetime': xlwt.easyxf(num_format_str='yyyy-mm-dd hh:mm:ss'),
@@ -56,9 +54,8 @@ class ExcelResponse(HttpResponse):
                         cell_style = styles['date']
                     elif isinstance(value, datetime.time):
                         cell_style = styles['time']
-                    elif (re.compile("^[0-9]+([.|,][0-9]+)?$")).match(u"{}".format(value)):
-                        value = locale.atof(value)
-                        cell_style = styles['default']
+                    elif (re.compile("^[0-9]+([,][0-9]+)?$")).match(u"{}".format(value)):
+                        value = float(value.replace(',', '.'))
                     else:
                         cell_style = styles['default']
                     sheet.write(rowx, colx, value, style=cell_style)
