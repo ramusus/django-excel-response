@@ -30,7 +30,7 @@ class ExcelResponse(HttpResponse):
         output = StringIO.StringIO()
         # Excel has a limit on number of rows; if we have more than that, make a csv
         use_xls = False
-        if len(data) <= 65536 and force_csv is not True:
+        if len(data) <= 1048576 and force_csv is not True:
             try:
                 import xlwt
             except ImportError:
