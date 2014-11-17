@@ -1,11 +1,11 @@
 import datetime
-import re
 
 from django.db.models.query import QuerySet, ValuesQuerySet
 from django.http import HttpResponse
 
 
 class ExcelResponse(HttpResponse):
+
     def __init__(self, data, output_name='excel_data', headers=None,
                  force_csv=False, encoding='utf8'):
 
@@ -26,7 +26,6 @@ class ExcelResponse(HttpResponse):
         assert valid_data is True, "ExcelResponse requires a sequence of sequences"
 
         import StringIO
-
         output = StringIO.StringIO()
         # Excel has a limit on number of rows; if we have more than that, make a csv
         use_xls = False
@@ -54,8 +53,6 @@ class ExcelResponse(HttpResponse):
                         cell_style = styles['date']
                     elif isinstance(value, datetime.time):
                         cell_style = styles['time']
-                    elif (re.compile("^[0-9]+([,][0-9]+)?$")).match(u"{}".format(value)):
-                        value = float(value.replace(',', '.'))
                     else:
                         cell_style = styles['default']
                     sheet.write(rowx, colx, value, style=cell_style)
@@ -78,4 +75,4 @@ class ExcelResponse(HttpResponse):
         super(ExcelResponse, self).__init__(content=output.getvalue(),
                                             mimetype=mimetype)
         self['Content-Disposition'] = 'attachment;filename="%s.%s"' % \
-                                      (output_name.replace('"', '\"'), file_ext)
+            (output_name.replace('"', '\"'), file_ext)

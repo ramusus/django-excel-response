@@ -11,14 +11,6 @@ CSV file formatted for Excel, depending on the amount of data.
 All of this is done in-memory and on-the-fly, with no disk writes,
 thanks to the StringIO library.
 
-UPDATE from 7wonders:
-
-I have added a simple regex check for float values and then replace the commas
-which are added by django locale back to decimal points.
-Fixes this problem I mention here -
-http://stackoverflow.com/questions/24296730/django-python-and-isues-with-xlwt-locale-formatting
-and should work with excel etc.
-
 UPDATE from ramusus:
 
 Change limit of allowed number of excel rows from 65536 to 1048576 according this
